@@ -33,7 +33,7 @@ namespace Mapster.JsonNet.Tests
         }
 
         [TestMethod]
-        public void ToString()
+        public new void ToString()
         {
             var json = new JObject {["foo"] = "bar"};
             var result = json.Adapt<string>(_config);
@@ -43,7 +43,7 @@ namespace Mapster.JsonNet.Tests
         [TestMethod]
         public void FromObject()
         {
-            var obj = new Mock {foo = "bar"};
+            var obj = new Mock {Foo = "bar"};
             var result = obj.Adapt<JObject>(_config);
             result["foo"].ShouldBe("bar");
         }
@@ -53,12 +53,12 @@ namespace Mapster.JsonNet.Tests
         {
             var json = new JObject { ["foo"] = "bar" };
             var result = json.Adapt<Mock>(_config);
-            result.foo.ShouldBe("bar");
+            result.Foo.ShouldBe("bar");
         }
     }
 
     public class Mock
     {
-        public string foo { get; set; }
+        public string Foo { get; set; }
     }
 }
