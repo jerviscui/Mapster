@@ -87,16 +87,20 @@ namespace Benchmark
                     throw new ArgumentOutOfRangeException(nameof(type));
             }
         }
+
         public static void ConfigureMapster(Foo fooInstance, MapsterCompilerType type)
         {
             SetupCompiler(type);
             TypeAdapterConfig.GlobalSettings.Compile(typeof(Foo), typeof(Foo)); //recompile
             fooInstance.Adapt<Foo, Foo>(); //exercise
         }
+
         public static void ConfigureExpressMapper(Foo fooInstance)
         {
+            ExpressMapper.Mapper.Register<Foo, Foo>();
             ExpressMapper.Mapper.Map<Foo, Foo>(fooInstance); //exercise
         }
+
         public static void ConfigureAutoMapper(Foo fooInstance)
         {
             _mapper.Map<Foo, Foo>(fooInstance); //exercise
@@ -108,10 +112,14 @@ namespace Benchmark
             TypeAdapterConfig.GlobalSettings.Compile(typeof(Customer), typeof(CustomerDTO));    //recompile
             customerInstance.Adapt<Customer, CustomerDTO>();    //exercise
         }
+
         public static void ConfigureExpressMapper(Customer customerInstance)
         {
+            ExpressMapper.Mapper.Register<Customer, CustomerDTO>();
+            ExpressMapper.Mapper.Register<Address, AddressDTO>();
             ExpressMapper.Mapper.Map<Customer, CustomerDTO>(customerInstance);  //exercise
         }
+
         public static void ConfigureAutoMapper(Customer customerInstance)
         {
             _mapper.Map<Customer, CustomerDTO>(customerInstance);    //exercise

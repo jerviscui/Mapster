@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using Benchmark.Classes;
 using Mapster;
@@ -28,12 +27,12 @@ namespace Benchmark
                 Ints = p1.Ints == null ? null : MapsterHelper.ToEnumerable<int>(p1.Ints)
             };
         }
-        
+
         private static Foo func1(Foo p2)
         {
             return Map(p2);
         }
-        
+
         private static Foo[] func2(Foo[] p3)
         {
             if (p3 == null)
@@ -41,12 +40,12 @@ namespace Benchmark
                 return null;
             }
             Foo[] result = new Foo[p3.Length];
-            
+
             int v = 0;
-            
+
             int i = 0;
             int len = p3.Length;
-            
+
             while (i < len)
             {
                 Foo item = p3[i];
@@ -54,9 +53,9 @@ namespace Benchmark
                 i++;
             }
             return result;
-            
+
         }
-        
+
         private static int[] func3(int[] p4)
         {
             if (p4 == null)
@@ -66,7 +65,7 @@ namespace Benchmark
             int[] result = new int[p4.Length];
             Array.Copy(p4, 0, result, 0, p4.Length);
             return result;
-            
+
         }
     }
 }

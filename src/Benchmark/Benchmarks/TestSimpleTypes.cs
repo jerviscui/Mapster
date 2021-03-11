@@ -16,13 +16,13 @@ namespace Benchmark.Benchmarks
             TestAdaptHelper.TestMapsterAdapter<Foo, Foo>(_fooInstance, Iterations);
         }
         
-        [Benchmark(Description = "Mapster 6.0.0 (Roslyn)")]
+        [Benchmark(Description = "Mapster 7.1.5 (Roslyn)")]
         public void RoslynTest()
         {
             TestAdaptHelper.TestMapsterAdapter<Foo, Foo>(_fooInstance, Iterations);
         }
 
-        [Benchmark(Description = "Mapster 6.0.0 (FEC)")]
+        [Benchmark(Description = "Mapster 7.1.5 (FEC)")]
         public void FecTest()
         {
             TestAdaptHelper.TestMapsterAdapter<Foo, Foo>(_fooInstance, Iterations);
@@ -34,18 +34,17 @@ namespace Benchmark.Benchmarks
             TestAdaptHelper.TestCodeGen(_fooInstance, Iterations);
         }
 
-        [Benchmark]
+        [Benchmark(Description = "ExpressMapper.Core 1.9.3")]
         public void ExpressMapperTest()
         {
             TestAdaptHelper.TestExpressMapper<Foo, Foo>(_fooInstance, Iterations);
         }
 
-        [Benchmark]
+        [Benchmark(Description = "AutoMapper 10.1.1")]
         public void AutoMapperTest()
         {
             TestAdaptHelper.TestAutoMapper<Foo, Foo>(_fooInstance, Iterations);
         }
-
 
         [GlobalSetup(Target = nameof(MapsterTest))]
         public void SetupMapster()
