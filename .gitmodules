@@ -1,0 +1,4 @@
+[submodule "src/ref/ExpressionDebugger"]
+	path = src/ref/ExpressionDebugger
+	url = https://github.com/jerviscui/ExpressionDebugger.git
+	branch = ref
