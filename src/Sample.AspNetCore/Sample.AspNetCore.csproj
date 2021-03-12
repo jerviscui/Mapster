@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Mapster.Async\Mapster.Async.csproj" />
     <ProjectReference Include="..\Mapster.DependencyInjection\Mapster.DependencyInjection.csproj" />
     <ProjectReference Include="..\Mapster.EFCore\Mapster.EFCore.csproj" />
-    <ProjectReference Include="..\Mapster\Mapster.csproj" />
   </ItemGroup>
 
 
