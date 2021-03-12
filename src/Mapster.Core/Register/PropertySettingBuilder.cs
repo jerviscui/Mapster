@@ -30,6 +30,13 @@ namespace Mapster
             return this;
         }
 
+        public PropertySettingBuilder<T> IsNullableReference<TReturn>(Expression<Func<T, TReturn>> member)
+        {
+            var setting = ForProperty(member.GetMemberName());
+            setting.NullableReference = true;
+            return this;
+        }
+
         public PropertySettingBuilder<T> Map<TReturn>(Expression<Func<T, TReturn>> member, string targetPropertyName)
         {
             var setting = ForProperty(member.GetMemberName());

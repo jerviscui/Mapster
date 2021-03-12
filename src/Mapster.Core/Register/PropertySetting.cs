@@ -10,7 +10,6 @@ namespace Mapster
         public Type? TargetPropertyType { get; set; }
         public LambdaExpression? MapFunc { get; set; }
 
-        //todo cuizj: nullable
-        public bool IsNullable { get; set; }
+        public bool NullableReference { get; set; } = false;
     }
 }

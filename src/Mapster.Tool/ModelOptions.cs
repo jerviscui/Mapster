@@ -8,14 +8,14 @@ namespace Mapster.Tool
     public class ModelOptions
     {
         [Option('a', "assembly", Required = true, HelpText = "Assembly to scan")]
-        public string Assembly { get; set; }
+        public string Assembly { get; set; } = string.Empty;
 
         [Option('o', "output", Required = false, Default = "Models", HelpText = "Output directory.")]
-        public string Output { get; set; }
+        public string Output { get; set; } = "Models";
 
         [Option('n', "namespace", Required = false, HelpText = "Namespace for models")]
         public string? Namespace { get; set; }
-        
+
         [Option('p', "printFullTypeName", Required = false, HelpText = "Set true to print full type name")]
         public bool PrintFullTypeName { get; set; }
 

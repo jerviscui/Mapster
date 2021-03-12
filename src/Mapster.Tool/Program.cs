@@ -54,7 +54,7 @@ namespace Mapster.Tool
 
                 var definitions = new TypeDefinitions
                 {
-                    Implements = new[] {type},
+                    Implements = new[] { type },
                     Namespace = opt.Namespace ?? type.Namespace,
                     TypeName = attr.Name ?? GetImplName(type.Name),
                     IsInternal = attr.IsInternal,
@@ -110,8 +110,11 @@ namespace Mapster.Tool
 
         private static string GetImplName(string name)
         {
-            if (name.Length >= 2 && name[0] == 'I' && name[1] >= 'A' && name[1] <= 'Z')
-                return name.Substring(1);
+            var span = name.AsSpan();
+
+            if (span.Length >= 2 && span[0] == 'I' && span[1] >= 'A' && span[1] <= 'Z')
+                return span[1..].ToString();
+
             return name + "Impl";
         }
 
@@ -185,7 +188,7 @@ namespace Mapster.Tool
             {
                 foreach (var ns in attr.IgnoreNamespaces)
                 {
-                    properties = properties.Where(it => getPropType(it).Namespace?.StartsWith(ns) != true);
+                    properties = properties.Where(it => GetPropType(it).Namespace?.StartsWith(ns) != true);
                 }
             }
 
@@ -197,18 +200,19 @@ namespace Mapster.Tool
                 var setting = propSettings?.GetValueOrDefault(member.Name);
                 if (setting?.Ignore == true)
                     continue;
-                
+
                 var adaptMember = member.GetCustomAttribute<AdaptMemberAttribute>();
                 if (!isTwoWays && adaptMember?.Side != null && adaptMember.Side != side)
                     adaptMember = null;
-                var propType = setting?.MapFunc?.ReturnType ?? 
+                var propType = setting?.MapFunc?.ReturnType ??
                                setting?.TargetPropertyType ??
-                               GetPropertyType(member, getPropType(member), attr.GetType(), opt.Namespace, builder);
+                               GetPropertyType(member, GetPropType(member), attr.GetType(), opt.Namespace, builder);
                 translator.Properties.Add(new PropertyDefinitions
                 {
                     Name = setting?.TargetPropertyName ?? adaptMember?.Name ?? member.Name,
                     Type = isNullable ? propType.MakeNullable() : propType,
-                    IsReadOnly = isReadOnly
+                    IsReadOnly = isReadOnly,
+                    NullableReference = setting?.NullableReference ?? false
                 });
             }
 
@@ -216,9 +220,9 @@ namespace Mapster.Tool
             var path = Path.Combine(Path.GetFullPath(opt.Output), definitions.TypeName + ".g.cs");
             WriteFile(code, path);
 
-            static Type getPropType(MemberInfo mem)
+            static Type GetPropType(MemberInfo mem)
             {
-                return mem is PropertyInfo p ? p.PropertyType : ((FieldInfo) mem).FieldType;
+                return mem is PropertyInfo p ? p.PropertyType : ((FieldInfo)mem).FieldType;
             }
         }
 
@@ -254,7 +258,7 @@ namespace Mapster.Tool
                 return navAttr.Type;
 
             var adaptAttr = builder.TypeSettings.ContainsKey(propType)
-                ? (BaseAdaptAttribute?) builder.Attribute
+                ? (BaseAdaptAttribute?)builder.Attribute
                 : propTypeAttrs.OfType<BaseAdaptAttribute>()
                     .FirstOrDefault(it => it.GetType() == attrType);
             if (adaptAttr == null)
@@ -273,7 +277,7 @@ namespace Mapster.Tool
 
         private static Type? GetFromType(Type type, BaseAdaptAttribute attr, HashSet<Type> types)
         {
-            if (!(attr is AdaptFromAttribute) && !(attr is AdaptTwoWaysAttribute)) 
+            if (!(attr is AdaptFromAttribute) && !(attr is AdaptTwoWaysAttribute))
                 return null;
 
             var fromType = attr.Type;
@@ -288,7 +292,7 @@ namespace Mapster.Tool
 
         private static Type? GetToType(Type type, BaseAdaptAttribute attr, HashSet<Type> types)
         {
-            if (!(attr is AdaptToAttribute)) 
+            if (!(attr is AdaptToAttribute))
                 return null;
 
             var toType = attr.Type;
@@ -332,7 +336,7 @@ namespace Mapster.Tool
             var codeGenConfig = new CodeGenerationConfig();
             codeGenConfig.Scan(assembly);
 
-            var assemblies = new HashSet<Assembly> {assembly};
+            var assemblies = new HashSet<Assembly> { assembly };
             foreach (var builder in codeGenConfig.AdaptAttributeBuilders)
             {
                 foreach (var setting in builder.TypeSettings)
@@ -415,7 +419,7 @@ namespace Mapster.Tool
 
                 foreach (var (tuple, rule) in ruleMaps)
                 {
-                    var mapType = (MapType) rule.Settings.GenerateMapper!;
+                    var mapType = (MapType)rule.Settings.GenerateMapper!;
                     GenerateExtensionMethods(mapType, config, tuple, translator, type, mapperAttr.IsHelperClass);
                 }
 
